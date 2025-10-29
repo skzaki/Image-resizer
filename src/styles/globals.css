@@ -1,0 +1,221 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; }
+
+:root{
+  --bg-gradient-start: #f8fafc;
+  --bg-gradient-end: #eff6ff;
+  --accent-1: #06b6d4; /* teal */
+  --accent-2: #8b5cf6; /* purple */
+  --accent-3: #4f46e5; /* indigo */
+  --muted: #6b7280;
+  --glass-bg: rgba(255,255,255,0.6);
+}
+
+/* Subtle page background */
+body{
+  background: linear-gradient(180deg,var(--bg-gradient-start), var(--bg-gradient-end));
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  /* Use Inter for clean, modern typography */
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+/* Utility: opt-out of text selection for controls where selection is undesirable */
+.no-select{ -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+
+/* Disable text selection on common non-input UI surfaces to improve polish.
+   Keep form controls and any element explicitly marked `.allow-select` selectable. */
+header, .nav-link, .hero-card, .hero-title, .hero-sub, .feature-card, .feature-icon, .cta-btn, .secondary-btn, .fab, .file-card, .tile-overlay, .stat-pill {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Keep form controls and explicit allow-list selectable for accessibility */
+input, textarea, select, .allow-select { -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text; }
+
+/* Also allow selecting file names if you add .allow-select to that element */
+
+/* Layered animated background for a more immersive look */
+body::before{
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(800px 400px at 10% 10%, rgba(99,102,241,0.12), transparent 20%),
+    radial-gradient(600px 300px at 90% 30%, rgba(6,182,212,0.08), transparent 18%),
+    radial-gradient(500px 300px at 50% 80%, rgba(139,92,246,0.06), transparent 18%);
+  background-repeat: no-repeat;
+  transform: translateZ(0);
+  animation: subtleFloat 12s ease-in-out infinite;
+}
+
+@keyframes subtleFloat {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.02); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* App header (glass + subtle shadow) */
+.app-header{
+  background: linear-gradient(90deg, rgba(255,255,255,0.75), rgba(255,255,255,0.6));
+  backdrop-filter: blur(6px) saturate(120%);
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+}
+
+/* Card surface used across panels */
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(247,250,255,0.8));
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.06);
+  border: 1px solid rgba(2,6,23,0.04);
+}
+
+/* Hero section styles */
+.hero-section{
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  position: relative;
+}
+.hero-card{
+  display: inline-block;
+  padding: 3rem 3rem 4rem 3rem; /* extra bottom padding so decorative underline doesn't overlap following content */
+  max-width: 900px;
+  border-radius: 1.25rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(247,250,255,0.82));
+  box-shadow: 0 30px 80px rgba(2,6,23,0.08), inset 0 1px 0 rgba(255,255,255,0.6);
+  border: 1px solid rgba(15,23,42,0.04);
+  position: relative; /* ensure blobs and decorations are positioned correctly */
+}
+
+/* Hero title accent */
+.hero-title{ font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1; font-weight: 800; }
+.hero-sub{ color: var(--muted); font-size: 1.05rem; }
+
+/* Enhanced immersive hero title */
+.hero-title{
+  position: relative;
+  font-size: clamp(2rem, 5vw, 4rem);
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  font-weight: 900;
+  /* align heading colors with app accents */
+  background-image: linear-gradient(90deg, var(--accent-3), var(--accent-1) 45%, var(--accent-2) 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 6px 22px rgba(79,70,229,0.06);
+  transition: none; /* remove hover transform for consistency */
+  margin-bottom: 1.25rem; /* provide spacing so underline and next section don't overlap */
+  z-index: 30; /* ensure title sits above decorative underline and following content */
+}
+
+/* Animated gradient sweep for hero title */
+.hero-title::after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 18px); /* place underline below the title with extra gap */
+  transform: translateX(-50%);
+  width: 48%;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(124,58,237,0.85), rgba(14,165,179,0.85));
+  filter: blur(6px);
+  opacity: .9;
+  animation: underlinePulse 3.2s infinite ease-in-out;
+  z-index: 20; /* underline should sit below title but above following content */
+  pointer-events: none;
+}
+@keyframes underlinePulse{
+  0%{ transform: translateX(-50%) scaleX(.95); opacity:.7 }
+  50%{ transform: translateX(-50%) scaleX(1.05); opacity:1 }
+  100%{ transform: translateX(-50%) scaleX(.95); opacity:.7 }
+}
+
+/* No hover transform on hero title to keep heading stable */
+
+/* Footer glass */
+.app-footer{ background: linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.5)); backdrop-filter: blur(6px); }
+
+/* CTA button style — use on main actions */
+.cta-btn {
+  background: linear-gradient(90deg,var(--accent-3),var(--accent-2));
+  color: white !important;
+  box-shadow: 0 8px 24px rgba(79,70,229,0.12);
+  transition: transform .18s ease, box-shadow .18s ease, opacity .12s ease;
+}
+.cta-btn:hover{ transform: translateY(-3px) scale(1.01); }
+.cta-btn:active{ transform: translateY(-1px); }
+.cta-btn:focus{ outline: none; box-shadow: 0 0 0 4px rgba(99,102,241,0.12); }
+
+/* Secondary / ghost button */
+.secondary-btn{
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(99,102,241,0.08);
+  color: var(--muted);
+}
+
+/* File card
+   Keep the underlying structure the same but add richer hover and focus visuals. */
+.file-card {
+  transition: transform .22s cubic-bezier(.2,.9,.2,1), box-shadow .22s ease;
+}
+.file-card:hover{ transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 40px rgba(2,6,23,0.12); }
+
+/* Glass highlight used by image tiles */
+.tile-overlay{
+  background: linear-gradient(180deg, rgba(2,6,23,0.18), rgba(2,6,23,0.02));
+}
+
+/* helper: hide scrollbar (already used) */
+.no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+.no-scrollbar::-webkit-scrollbar{ display:none; }
+
+
+/* Hide native scrollbar for horizontally scrollable lists (modern browsers) */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* small helper to visually hide overflowed items cleanly */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* Top navigation */
+.nav-links { display:flex; gap:1rem; align-items:center; }
+.nav-link { color: rgba(15,23,42,0.8); font-weight:600; padding:8px 10px; border-radius:8px; transition: background .18s ease, color .18s ease; }
+.nav-link:hover{ background: rgba(99,102,241,0.06); color: var(--accent-3); }
+
+/* Hero decorative blob */
+.hero-blob{ position:absolute; right:-6rem; top:-6rem; width:520px; height:520px; border-radius:50%; background: radial-gradient(circle at 30% 30%, rgba(99,102,241,0.18), transparent 30%), radial-gradient(circle at 70% 70%, rgba(6,182,212,0.12), transparent 30%); filter: blur(40px); transform: rotate(8deg); z-index:0; pointer-events:none; animation: blobFloat 10s ease-in-out infinite; }
+@keyframes blobFloat{ 0%{ transform: translateY(0) scale(1) rotate(0deg);} 50%{ transform: translateY(-12px) scale(1.03) rotate(6deg);} 100%{ transform: translateY(0) scale(1) rotate(0deg);} }
+
+/* Feature grid used under hero */
+.feature-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:1rem; margin-top:2rem; }
+.feature-grid{ position: relative; z-index: 5; }
+.feature-card{ background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(247,250,255,0.85)); border-radius:14px; padding:18px; box-shadow: 0 12px 30px rgba(2,6,23,0.06); border:1px solid rgba(2,6,23,0.04); transition: transform .2s ease, box-shadow .2s ease; }
+.feature-card:hover{ transform: translateY(-6px); box-shadow: 0 22px 50px rgba(2,6,23,0.12); }
+.feature-icon{ width:44px; height:44px; border-radius:10px; display:grid; place-items:center; color:white; font-weight:700; }
+
+.stat-pill{ display:inline-flex; gap:8px; align-items:center; background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7)); padding:8px 12px; border-radius:999px; box-shadow: 0 6px 20px rgba(2,6,23,0.05); font-weight:700; }
+
+/* Small utility for subtle section separators */
+.section-sep{ height:1px; background: linear-gradient(90deg, transparent, rgba(2,6,23,0.04), transparent); margin: 2rem 0; }
+
+/* Slightly bolder footer */
+.app-footer { padding-top: 1.25rem; padding-bottom: 1.25rem; }
